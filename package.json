@@ -1,0 +1,21 @@
+{
+  "name": "expermit-mac",
+  "private": true,
+  "version": "0.1.4",
+  "description": "ExPermit 实验记录本 · macOS 版（Electron 壳 + Swift 原生壳，源码在 expermit-eln）",
+  "main": "app/shell/main.cjs",
+  "scripts": {
+    "fetch": "node scripts/fetch-core.mjs",
+    "fetch:local": "node scripts/fetch-core.mjs --core ../expermit-eln",
+    "dist": "node scripts/fetch-core.mjs --core ../expermit-eln && electron-builder --mac",
+    "dist:native": "node scripts/fetch-core.mjs --core ../expermit-eln && ./native/mac/build.sh",
+    "selftest": "node scripts/selftest.mjs"
+  },
+  "dependencies": {
+    "fflate": "0.8.3"
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0"
+  }
+}

@@ -1,0 +1,44 @@
+name: Build macOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 核心版本号（如 0.1.4，需核心仓已发布含 www/shell 制品的 Release）
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm install
+      - name: 取核心制品
+        run: node scripts/fetch-core.mjs --ver ${{ inputs.version }}
+      - name: Electron 版打包（dmg）
+        run: npx electron-builder --mac
+      - name: 原生 Swift 壳打包
+        run: ./native/mac/build.sh
+      - name: 自检（两个壳都要 PASS）
+        run: node scripts/selftest.mjs
+      - name: 打包原生 App 为 zip
+        run: ditto -c -k --keepParent release-native/ExPermit.app "release/ExPermit-native-${VER}.zip"
+        env:
+          VER: ${{ inputs.version }}
+      - name: 发布
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER="${{ inputs.version }}"
+          TAG="v$VER"
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" --title "macOS v$VER" --notes "由核心 v$VER 构建（Electron 版 + 原生壳，未签名）"
+          gh release upload "$TAG" release/*.dmg release/ExPermit-native-"$VER".zip --clobber
+          echo "已发布 macOS v$VER"

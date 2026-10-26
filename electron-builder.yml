@@ -1,0 +1,22 @@
+appId: com.fengtong.expermit
+productName: ExPermit 实验记录本
+directories:
+  output: release
+  buildResources: build
+files:
+  - app/shell/**
+  - node_modules/fflate/**
+  - package.json
+extraResources:
+  - from: app/www
+    to: www
+  - from: resources/update-config.json
+    to: update-config.json
+mac:
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  artifactName: ExPermit-${version}-${arch}.${ext}
+dmg:
+  artifactName: ExPermit-${version}-${arch}.dmg
