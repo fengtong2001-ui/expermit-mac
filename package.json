@@ -7,7 +7,7 @@
   "scripts": {
     "fetch": "node scripts/fetch-core.mjs",
     "fetch:local": "node scripts/fetch-core.mjs --core ../expermit-eln",
-    "dist": "node scripts/fetch-core.mjs --core ../expermit-eln && electron-builder --mac",
+    "dist": "node scripts/fetch-core.mjs --core ../expermit-eln && electron-builder --mac --publish never",
     "dist:native": "node scripts/fetch-core.mjs --core ../expermit-eln && ./native/mac/build.sh",
     "selftest": "node scripts/selftest.mjs"
   },

@@ -23,7 +23,7 @@ jobs:
       - name: 取核心制品
         run: node scripts/fetch-core.mjs --ver ${{ inputs.version }}
       - name: Electron 版打包（dmg）
-        run: npx electron-builder --mac
+        run: npx electron-builder --mac --publish never
       - name: 原生 Swift 壳打包
         run: ./native/mac/build.sh
       - name: 自检（两个壳都要 PASS）
